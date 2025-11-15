@@ -1,12 +1,14 @@
 // Animation variable for sky
 let time = 0;
 let skySeed1;
+let waterSeed1;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
   
-  // Initialize random seed for sky animation
+  // Initialize random seed for sky and water animation
   skySeed1 = random(1000);
+  waterSeed1 = random(1000);
 }
 
 function draw() {
@@ -50,19 +52,24 @@ function drawSky() {
 }
 
 function drawWater() {
-  // Dark swirling blues and purples
+  // Dark swirling blues and purples with Perlin noise animation
   for (let i = height * 0.4; i < height * 0.7; i += 12) {
-    let wave = sin(i * 0.1) * 40;
-    let wave2 = cos(i * 0.15) * 30;
+    // Animated waves using time
+    let wave = sin(i * 0.1 + time * 0.8) * 40;
+    let wave2 = cos(i * 0.15 + time * 0.6) * 30;
+
     // More color variation
     let r = 20 + sin(i * 0.2) * 10;
     let g = 30 + i * 0.3 + cos(i * 0.25) * 15;
     let b = 60 + i * 0.2 + sin(i * 0.3) * 20;
     fill(r, g, b, 160);
     noStroke();
-    // Draw wavy water using rectangles
+
+    // Draw wavy water using rectangles with Perlin noise animation
     for (let x = 0; x < width; x += 3) {
-      let y = i + sin(x * 0.02 + i * 0.1) * 25 + sin(x * 0.03 + i * 0.2) * 15 + cos(x * 0.015 + i * 0.12) * 10 + wave + wave2;
+      // Use Perlin noise for smooth water flow
+      let noiseFlow = noise(x * 0.02 + waterSeed1, time * 0.5) * 15;
+      let y = i + sin(x * 0.02 + i * 0.1 + time * 1.2) * 25 + sin(x * 0.03 + i * 0.2 + time * 0.9) * 15 + cos(x * 0.015 + i * 0.12 + time * 0.7) * 10 + wave + wave2 + noiseFlow;
       rect(x, y, 3, height - y);
     }
   }
