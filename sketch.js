@@ -1,4 +1,4 @@
-// Animation variable for sky
+// Animation variable for all
 let time = 0;
 let skySeed1;
 let waterSeed1;
@@ -9,7 +9,7 @@ let linesSeed1;
 function setup() {
   createCanvas(windowWidth, windowHeight);
   
-  // Initialize random seed for sky and water animation
+  // Initialize random seed for all animation
   skySeed1 = random(1000);
   waterSeed1 = random(1000);
   bridgeSeed1 = random(1000);
