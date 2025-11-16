@@ -2,6 +2,7 @@
 let time = 0;
 let skySeed1;
 let waterSeed1;
+let bridgeSeed1;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -9,6 +10,7 @@ function setup() {
   // Initialize random seed for sky and water animation
   skySeed1 = random(1000);
   waterSeed1 = random(1000);
+  bridgeSeed1 = random(1000);
 }
 
 function draw() {
@@ -86,10 +88,13 @@ function drawBridge() {
   // Calculate distance and angle
   let bridgeLength = dist(startX, startY, endX, endY);
   let angle = atan2(endY - startY, endX - startX);
+
+  // Use Perlin noise for subtle bridge sway
+  let bridgeSway = noise(time * 0.2 + bridgeSeed1) * 4 - 2;
   
   push();
   translate(startX, startY);
-  rotate(angle);
+  rotate(angle + bridgeSway * 0.03);
   
   // Bridge surface
   fill(80, 40, 20, 200);
@@ -99,12 +104,14 @@ function drawBridge() {
   rect(-100, 50, bridgeLength + 300, 30);
   rect(-100, 150, bridgeLength + 300, 30);
   rect(-100, 250, bridgeLength + 300, 30);
-
-  // Bridge railings
+  
+  // Bridge railings with Perlin noise animation
   stroke(100, 50, 30);
   strokeWeight(4);
   for (let x = 0; x < bridgeLength; x += 20) {
-    line(x, 10, x, -20);
+    // Use Perlin noise for slight railing movement
+    let railingOffset = noise(x * 0.1 + time * 0.3 + bridgeSeed1) * 4;
+    line(x, 10 + railingOffset, x, -20 + railingOffset);
   }
 
   fill("white")
