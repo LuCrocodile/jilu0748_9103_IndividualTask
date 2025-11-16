@@ -3,6 +3,7 @@ let time = 0;
 let skySeed1;
 let waterSeed1;
 let bridgeSeed1;
+let screamSeed1;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -11,6 +12,7 @@ function setup() {
   skySeed1 = random(1000);
   waterSeed1 = random(1000);
   bridgeSeed1 = random(1000);
+  screamSeed1 = random(1000);
 }
 
 function draw() {
@@ -104,7 +106,7 @@ function drawBridge() {
   rect(-100, 50, bridgeLength + 300, 30);
   rect(-100, 150, bridgeLength + 300, 30);
   rect(-100, 250, bridgeLength + 300, 30);
-  
+
   // Bridge railings with Perlin noise animation
   stroke(100, 50, 30);
   strokeWeight(4);
@@ -152,46 +154,55 @@ function drawScreamingPeople() {
   push();
   translate(width * 0.5, height * 0.85);
   
-  noFill();
+  // Use Perlin noise for pulsing scream effect - separate for each effect
+  let screamPulse1 = noise(time * 2 + screamSeed1) * 20 + 10;
+  let screamPulse2 = noise(time * 1.8 + screamSeed1 + 50) * 15 + 8;
   
-  // Scream effect
+  // Use Perlin noise for body sway
+  let bodySway = noise(time * 0.6 + screamSeed1) * 3 - 1.5;
+  
+  // Use Perlin noise for mouth size
+  let mouthSize = 35 + noise(time * 3 + screamSeed1) * 10;
+  let mouthHeight = 50 + noise(time * 3 + screamSeed1 + 30) * 10;
+
+  // Scream effect 1 with Perlin noise pulsing animation
   noFill();
   stroke(255, 200, 100, 100);
   strokeWeight(3);
-  ellipse(0, -60, 120, 150);
-  ellipse(0, -60, 180, 220);
-  ellipse(0, -60, 240, 290);
-  ellipse(0, -60, 300, 360);
+  ellipse(0, -60, 120 + screamPulse1, 150 + screamPulse1);
+  ellipse(0, -60, 180 + screamPulse1 * 1.2, 220 + screamPulse1 * 1.2);
+  ellipse(0, -60, 240 + screamPulse1 * 1.4, 290 + screamPulse1 * 1.4);
+  ellipse(0, -60, 300 + screamPulse1 * 1.6, 360 + screamPulse1 * 1.6);
   
-  // Scream effect 2
+  // Scream effect 2 with different Perlin noise pulsing
   stroke(255, 150, 50, 80);
   strokeWeight(2);
-  ellipse(0, -60, 150, 180);
-  ellipse(0, -60, 210, 250);
-  ellipse(0, -60, 270, 320);
+  ellipse(0, -60, 150 + screamPulse2, 180 + screamPulse2);
+  ellipse(0, -60, 210 + screamPulse2 * 1.3, 250 + screamPulse2 * 1.3);
+  ellipse(0, -60, 270 + screamPulse2 * 1.5, 320 + screamPulse2 * 1.5);
 
-  // Body
+  // Body with Perlin noise sway
   fill(30, 40, 60);
   noStroke();
-  ellipse(0, 20, 80, 200);
+  ellipse(bodySway, 20, 80, 200);
   
   // Head
   fill(200, 220, 150);
-  ellipse(0, -60, 70, 90);
+  ellipse(bodySway, -60, 70, 90);
   
   // Eyes
   fill(20);
-  ellipse(-15, -70, 12, 15);
-  ellipse(15, -70, 12, 15);
+  ellipse(-15 + bodySway, -70, 12, 15);
+  ellipse(15 + bodySway, -70, 12, 15);
   
-  // Mouth
+  // Mouth with animated size
   fill(40, 30, 20);
-  ellipse(0, -40, 35, 50);
+  ellipse(bodySway, -40, mouthSize, mouthHeight);
   
   // Hands on head
   fill(200, 220, 150);
-  ellipse(-45, -75, 25, 40);
-  ellipse(45, -75, 25, 40);
+  ellipse(-45 + bodySway, -75, 25, 40);
+  ellipse(45 + bodySway, -75, 25, 40);
   
   pop();
 }
