@@ -4,6 +4,7 @@ let skySeed1;
 let waterSeed1;
 let bridgeSeed1;
 let screamSeed1;
+let linesSeed1;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -13,6 +14,7 @@ function setup() {
   waterSeed1 = random(1000);
   bridgeSeed1 = random(1000);
   screamSeed1 = random(1000);
+  linesSeed1 = random(1000);
 }
 
 function draw() {
@@ -30,6 +32,8 @@ function draw() {
   drawBGPeople();
 
   drawScreamingPeople();
+
+  drawRandomLines();
 }
 
 function drawSky() {
@@ -205,6 +209,37 @@ function drawScreamingPeople() {
   ellipse(45 + bodySway, -75, 25, 40);
   
   pop();
+}
+
+function drawRandomLines() {
+  // Use Perlin noise to generate random lines on the canvas
+  strokeWeight(20);
+  
+  // Generate multiple lines using Perlin noise
+  for (let i = 0; i < 20; i++) {
+    // Use Perlin noise for random colors
+    let r = noise(i * 0.5 + linesSeed1 + 500, time * 0.2) * 255;
+    let g = noise(i * 0.5 + linesSeed1 + 600, time * 0.25) * 255;
+    let b = noise(i * 0.5 + linesSeed1 + 700, time * 0.3) * 255;
+    
+    // Use Perlin noise for line position
+    let x1 = noise(i * 0.5 + linesSeed1, time * 0.3) * width;
+    let y1 = noise(i * 0.5 + linesSeed1 + 100, time * 0.3) * height;
+    
+    // Use Perlin noise for line end position
+    let angle = noise(i * 0.5 + linesSeed1 + 200, time * 0.4) * TWO_PI;
+    let length = noise(i * 0.5 + linesSeed1 + 300, time * 0.2) * 50 + 20;
+    
+    let x2 = x1 + cos(angle) * length;
+    let y2 = y1 + sin(angle) * length;
+    
+    // Use Perlin noise for line opacity
+    let opacity = noise(i * 0.5 + linesSeed1 + 400, time * 0.5) * 100 + 50;
+    stroke(r, g, b, opacity);
+    
+    // Draw the line
+    line(x1, y1, x2, y2);
+  }
 }
 
 function windowResized() {
